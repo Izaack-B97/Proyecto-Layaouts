@@ -1,6 +1,9 @@
 const express = require("express");
 
 let app = express();
+/*        midominio.com/estatico/...    */
+app.use('/estatico',express.static('public'));
+app.use(express.static('assets'));
 
 app.set('view engine','pug');
 
