@@ -1,17 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-let app = express();
-const mongoose = require("mongoose"); 
-const Schema = mongoose.Schema;
-mongoose.connect("mongodb://localhost/fotos"); 
-
-let userSchemaJSON = {
-    email: String,
-    password: String
-};
-
-let user_schema = new Schema(userSchemaJSON);
-let User = mongoose.model("User",user_schema);
+const User = require("./models/user").User;
+const app = express();
 
 /*        midominio.com/estatico/...    */
 app.use('/estatico',express.static('public'));
@@ -37,7 +27,16 @@ app.get('/login', function(req,res){
 });
 
 app.post('/users', function(req,res){
-    let user=new User({email: req.body.email, password: req.body.password});
+    let user=new User({
+        "email": req.body.email, 
+        "password": req.body.password,
+        "password_confirmation": req.body.password_confirmation
+    });
+
+    console.log(user.password_confirmation);
+    
+
+    
 
     user.save(function(){
         res.send("Guardamos tus datos");
