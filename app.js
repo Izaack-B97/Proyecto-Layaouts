@@ -29,6 +29,7 @@ app.get('/login', function(req,res){
 app.post('/users', function(req,res){
     let user=new User({
         "email": req.body.email, 
+        "username": req.body.username,
         "password": req.body.password,
         "password_confirmation": req.body.password_confirmation
     });

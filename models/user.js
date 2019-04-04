@@ -12,7 +12,16 @@ let user_schema = new Schema({
     "name": String,
     "lastname": String,
     "username": {type: String,required: true, maxlength:[50,"Username muy grande"]},
-    "password": {type: String, minlength:[8,"El password es muy pequeño"]},
+    "password": 
+    {   type: String, 
+        minlength:[8,"El password es muy pequeño"],
+        validate:{
+            validator:function(p){
+               return this.password_confirmation == p;
+            },
+            message: "Las contraseñas no coinciden"
+        }
+    },
     "age": {type:Number, min:[5,"La edad no puede ser menor que 5"],max:[100,"La edad no puede ser mayor que 100"]},
     "email": {type:String, required: "El correo es obligatorio", match:email_match},
     "date_of_bird": Date,
