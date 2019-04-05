@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const User = require("./models/user").User;
 const app = express();
+const session = require("express-session");
 
 /*        midominio.com/estatico/...    */
 app.use('/estatico',express.static('public'));
@@ -11,10 +12,16 @@ app.use(express.static('assets'));
 app.use(bodyParser.json());// para peticiones application/json
 app.use(bodyParser.urlencoded({extended: true}));
 
+app.use(session({
+    secret:"123byuhbsdah12ub",
+    resave:false,
+    saveUninitialized:false
+}));
  
 app.set('view engine','pug');
 
 app.get('/', function(req,res){
+    console.log(req.session.user_id);
     res.render('index');
 });
 
@@ -63,10 +70,10 @@ app.post('/users', function(req,res){
 
 app.post('/sessions', function(req,res){
     /*query,fills(campos),callback */
-    User.findOne   ({ "email":req.body.email,"password":req.body.password },"",function(err,docs){
-         console.log(docs);
-         res.send("Bienvenido " + req.body.email + " !!!");    
-         
+    User.findOne   ({ "email":req.body.email,"password":req.body.password },"",function(err,user){
+         //console.log(docs);  
+         req.session.user_id = user._id;
+         res.send("Bienvenido " + req.body.email + " !!!");  
     });
 });
 
